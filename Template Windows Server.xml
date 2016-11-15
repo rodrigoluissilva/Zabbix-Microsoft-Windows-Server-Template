@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.0</version>
-    <date>2016-10-19T13:31:14Z</date>
+    <date>2016-11-15T17:01:49Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -2155,7 +2155,9 @@ https://technet.microsoft.com/en-us/library/cc963194.aspx</description>
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\PhysicalDisk(_Total)\% Idle Time&quot;,{$PERF_INTERVAL}].avg(600)}&lt;20</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Server:perf_counter[&quot;\PhysicalDisk(_Total)\% Idle Time&quot;,{$PERF_INTERVAL}].max(5m)}&lt;30)&#13;
+or&#13;
+({TRIGGER.VALUE}=1 and {Template Windows Server:perf_counter[&quot;\PhysicalDisk(_Total)\% Idle Time&quot;,{$PERF_INTERVAL}].min(10m)}&lt;60)</expression>
             <name>[{HOST.NAME}] Busy Disk</name>
             <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
             <status>0</status>
@@ -2166,7 +2168,9 @@ This is how it’s calculated, the system timestamps an event when the disk goes
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Processor(_Total)\% Processor Time&quot;,{$PERF_INTERVAL}].avg(5m)}&gt;80</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Server:perf_counter[&quot;\Processor(_Total)\% Processor Time&quot;,{$PERF_INTERVAL}].min(5m)}&gt;80)&#13;
+or&#13;
+({TRIGGER.VALUE}=1 and {Template Windows Server:perf_counter[&quot;\Processor(_Total)\% Processor Time&quot;,{$PERF_INTERVAL}].max(10m)}&gt;70)</expression>
             <name>[{HOST.NAME}] CPU running over 80%</name>
             <url/>
             <status>0</status>
@@ -2176,47 +2180,57 @@ This is how it’s calculated, the system timestamps an event when the disk goes
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Data Operations/sec&quot;,{$PERF_INTERVAL}].avg(600)}&gt;1500</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Data Operations/sec&quot;,{$PERF_INTERVAL}].min(5m)}&gt;1500)&#13;
+or&#13;
+({TRIGGER.VALUE}=1 and {Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Data Operations/sec&quot;,{$PERF_INTERVAL}].max(10m)}&gt;1000)</expression>
             <name>[{HOST.NAME}] High IO Data Operations/sec</name>
             <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
             <status>0</status>
-            <priority>3</priority>
+            <priority>2</priority>
             <description/>
             <type>0</type>
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Other Operations/sec&quot;,{$PERF_INTERVAL}].avg(600)}&gt;1500</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Other Operations/sec&quot;,{$PERF_INTERVAL}].min(5m)}&gt;1500)&#13;
+or&#13;
+({TRIGGER.VALUE}=1 and {Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Other Operations/sec&quot;,{$PERF_INTERVAL}].max(10m)}&gt;1000)</expression>
             <name>[{HOST.NAME}] High IO Other Operations/sec</name>
             <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
             <status>0</status>
-            <priority>3</priority>
+            <priority>2</priority>
             <description/>
             <type>0</type>
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Read Operations/sec&quot;,{$PERF_INTERVAL}].avg(600)}&gt;1500</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Read Operations/sec&quot;,{$PERF_INTERVAL}].min(5m)}&gt;1500)&#13;
+or&#13;
+({TRIGGER.VALUE}=1 and {Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Read Operations/sec&quot;,{$PERF_INTERVAL}].max(10m)}&gt;1000)</expression>
             <name>[{HOST.NAME}] High IO Read Operations/sec</name>
             <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
             <status>0</status>
-            <priority>3</priority>
+            <priority>2</priority>
             <description/>
             <type>0</type>
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Write Operations/sec&quot;,{$PERF_INTERVAL}].avg(600)}&gt;1500</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Write Operations/sec&quot;,{$PERF_INTERVAL}].min(5m)}&gt;1500)&#13;
+or&#13;
+({TRIGGER.VALUE}=1 and {Template Windows Server:perf_counter[&quot;\Process(_Total)\IO Write Operations/sec&quot;,{$PERF_INTERVAL}].max(10m)}&gt;1000)</expression>
             <name>[{HOST.NAME}] High IO Write Operations/sec</name>
             <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
             <status>0</status>
-            <priority>3</priority>
+            <priority>2</priority>
             <description/>
             <type>0</type>
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\System\Context Switches/sec&quot;,{$PERF_INTERVAL}].avg(5m)}&gt;4000</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Server:perf_counter[&quot;\System\Context Switches/sec&quot;,{$PERF_INTERVAL}].min(5m)}&gt;4000)&#13;
+or&#13;
+({TRIGGER.VALUE}=1 and {Template Windows Server:perf_counter[&quot;\System\Context Switches/sec&quot;,{$PERF_INTERVAL}].max(10m)}&gt;3000)</expression>
             <name>[{HOST.NAME}] High rate of Context Switches/sec</name>
             <url>https://technet.microsoft.com/en-us/library/cc938606.aspx</url>
             <status>0</status>
@@ -2226,7 +2240,9 @@ This is how it’s calculated, the system timestamps an event when the disk goes
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Memory\Pages/sec&quot;,{$PERF_INTERVAL}].avg(5m)}&gt;150</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Server:perf_counter[&quot;\Memory\Pages/sec&quot;,{$PERF_INTERVAL}].min(5m)}&gt;150)&#13;
+or&#13;
+({TRIGGER.VALUE}=1 and {Template Windows Server:perf_counter[&quot;\Memory\Pages/sec&quot;,{$PERF_INTERVAL}].max(10m)}&gt;100)</expression>
             <name>[{HOST.NAME}] High rate of Memory Pages/sec</name>
             <url>https://technet.microsoft.com/en-us/library/cc958290.aspx</url>
             <status>0</status>
@@ -2246,7 +2262,7 @@ This is how it’s calculated, the system timestamps an event when the disk goes
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Server Work Queues(*)\Queue Length&quot;,{$PERF_INTERVAL}].avg(600)}&gt;4</expression>
+            <expression>{Template Windows Server:perf_counter[&quot;\Server Work Queues(*)\Queue Length&quot;,{$PERF_INTERVAL}].avg(5m)}&gt;4</expression>
             <name>[{HOST.NAME}] Large Server Work Queues</name>
             <url>https://msdn.microsoft.com/en-us/library/ms804619.aspx</url>
             <status>0</status>
@@ -2256,7 +2272,7 @@ This is how it’s calculated, the system timestamps an event when the disk goes
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Network Interface(*)\Output Queue Length&quot;,{$PERF_INTERVAL}].avg(600)}&gt;0</expression>
+            <expression>{Template Windows Server:perf_counter[&quot;\Network Interface(*)\Output Queue Length&quot;,{$PERF_INTERVAL}].last()}&gt;0</expression>
             <name>[{HOST.NAME}] Network Output Queue Length</name>
             <url>https://blogs.technet.microsoft.com/yongrhee/2010/07/06/network-interface-output-queue-length-values-extremely-high/</url>
             <status>0</status>
@@ -2266,7 +2282,7 @@ This is how it’s calculated, the system timestamps an event when the disk goes
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Server:perf_counter[&quot;\Processor(_Total)\% Interrupt Time&quot;,{$PERF_INTERVAL}].avg(600)}&gt;30</expression>
+            <expression>{Template Windows Server:perf_counter[&quot;\Processor(_Total)\% Interrupt Time&quot;,{$PERF_INTERVAL}].avg(5m)}&gt;30</expression>
             <name>[{HOST.NAME}] Processor spending more than 30% with Interrupt Time</name>
             <url>https://blogs.technet.microsoft.com/askperf/2008/01/18/do-you-know-where-your-processor-spends-its-time/</url>
             <status>0</status>
