@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.0</version>
-    <date>2016-10-19T13:31:05Z</date>
+    <date>2017-06-15T11:32:21Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -502,6 +502,49 @@
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>system.swap.size[,total]</key>
+                    <delay>60</delay>
+                    <history>7</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>3</value_type>
+                    <allowed_hosts/>
+                    <units>B</units>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>Used swap space</name>
+                    <type>0</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>system.swap.size[,used]</key>
                     <delay>3600</delay>
                     <history>7</history>
                     <trends>365</trends>
@@ -677,7 +720,50 @@
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>vm.memory.size[total]</key>
-                    <delay>3600</delay>
+                    <delay>60</delay>
+                    <history>7</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>3</value_type>
+                    <allowed_hosts/>
+                    <units>B</units>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>Used memory</name>
+                    <type>0</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>vm.memory.size[used]</key>
+                    <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -1112,21 +1198,21 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template Windows Generic:vfs.fs.size[{#FSNAME},pfree].last(0)}&lt;10</expression>
-                            <name>[{HOST.NAME}] Free disk space is less than 10% on volume {#FSNAME}</name>
+                            <expression>{Template Windows Generic:vfs.fs.size[{#FSNAME},pfree].last(0)}&lt;{$FREE_DISKSPACE_WARN1}</expression>
+                            <name>[{HOST.NAME}] Free disk space is less than {$FREE_DISKSPACE_WARN1}% on volume {#FSNAME}</name>
                             <url/>
                             <status>0</status>
-                            <priority>3</priority>
+                            <priority>2</priority>
                             <description/>
                             <type>0</type>
                             <dependencies/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template Windows Generic:vfs.fs.size[{#FSNAME},pfree].last(0)}&lt;20</expression>
-                            <name>[{HOST.NAME}] Free disk space is less than 20% on volume {#FSNAME}</name>
+                            <expression>{Template Windows Generic:vfs.fs.size[{#FSNAME},pfree].last(0)}&lt;{$FREE_DISKSPACE_WARN2}</expression>
+                            <name>[{HOST.NAME}] Free disk space is less than {$FREE_DISKSPACE_WARN2}% on volume {#FSNAME}</name>
                             <url/>
                             <status>0</status>
-                            <priority>2</priority>
+                            <priority>3</priority>
                             <description/>
                             <type>0</type>
                             <dependencies/>
@@ -1181,7 +1267,16 @@
                     <host_prototypes/>
                 </discovery_rule>
             </discovery_rules>
-            <macros/>
+            <macros>
+                <macro>
+                    <macro>{$FREE_DISKSPACE_WARN1}</macro>
+                    <value>20</value>
+                </macro>
+                <macro>
+                    <macro>{$FREE_DISKSPACE_WARN2}</macro>
+                    <value>10</value>
+                </macro>
+            </macros>
             <templates>
                 <template>
                     <name>Template App Zabbix Agent</name>
@@ -1297,7 +1392,7 @@
                             <dynamic>0</dynamic>
                             <sort_triggers>0</sort_triggers>
                             <resource>
-                                <name>System - Swap Space</name>
+                                <name>System - Swap Space usage</name>
                                 <host>Template Windows Generic</host>
                             </resource>
                             <max_columns>3</max_columns>
@@ -1330,7 +1425,9 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Generic:vm.memory.size[free].last(0)}&lt;10000</expression>
+            <expression>({TRIGGER.VALUE}=0 and {Template Windows Generic:vm.memory.size[free].max(5m)}&lt;({Template Windows Generic:vm.memory.size[total].last()}*0.10))&#13;
+or &#13;
+({TRIGGER.VALUE}=1 and {Template Windows Generic:vm.memory.size[free].min(10m)}&lt;({Template Windows Generic:vm.memory.size[total].last()}*0.10))</expression>
             <name>[{HOST.NAME}] Lack of Free Memory</name>
             <url/>
             <status>0</status>
@@ -1340,7 +1437,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Template Windows Generic:system.swap.size[,free].last(0)}&lt;100000</expression>
+            <expression>{Template Windows Generic:system.swap.size[,free].last(0)} &lt; ({Template Windows Generic:system.swap.size[,total].last()}*0.10)</expression>
             <name>[{HOST.NAME}] Lack of Free Swap Space</name>
             <url/>
             <status>0</status>
@@ -1529,23 +1626,32 @@
             <percent_left>0.0000</percent_left>
             <percent_right>0.0000</percent_right>
             <ymin_type_1>1</ymin_type_1>
-            <ymax_type_1>2</ymax_type_1>
+            <ymax_type_1>0</ymax_type_1>
             <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>
-                <host>Template Windows Generic</host>
-                <key>vm.memory.size[total]</key>
-            </ymax_item_1>
+            <ymax_item_1>0</ymax_item_1>
             <graph_items>
                 <graph_item>
                     <sortorder>0</sortorder>
-                    <drawtype>5</drawtype>
-                    <color>1A7C11</color>
+                    <drawtype>1</drawtype>
+                    <color>00AA00</color>
                     <yaxisside>0</yaxisside>
                     <calc_fnc>2</calc_fnc>
                     <type>0</type>
                     <item>
                         <host>Template Windows Generic</host>
-                        <key>vm.memory.size[free]</key>
+                        <key>vm.memory.size[total]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <drawtype>5</drawtype>
+                    <color>3333FF</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>Template Windows Generic</host>
+                        <key>vm.memory.size[used]</key>
                     </item>
                 </graph_item>
             </graph_items>
@@ -1595,7 +1701,7 @@
             </graph_items>
         </graph>
         <graph>
-            <name>System - Swap Space</name>
+            <name>System - Swap Space usage</name>
             <width>900</width>
             <height>200</height>
             <yaxismin>0.0000</yaxismin>
@@ -1608,23 +1714,32 @@
             <percent_left>0.0000</percent_left>
             <percent_right>0.0000</percent_right>
             <ymin_type_1>1</ymin_type_1>
-            <ymax_type_1>2</ymax_type_1>
+            <ymax_type_1>0</ymax_type_1>
             <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>
-                <host>Template Windows Generic</host>
-                <key>system.swap.size[,total]</key>
-            </ymax_item_1>
+            <ymax_item_1>0</ymax_item_1>
             <graph_items>
                 <graph_item>
                     <sortorder>0</sortorder>
-                    <drawtype>5</drawtype>
-                    <color>1A7C11</color>
+                    <drawtype>1</drawtype>
+                    <color>00AA00</color>
                     <yaxisside>0</yaxisside>
                     <calc_fnc>2</calc_fnc>
                     <type>0</type>
                     <item>
                         <host>Template Windows Generic</host>
-                        <key>system.swap.size[,free]</key>
+                        <key>system.swap.size[,total]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <drawtype>5</drawtype>
+                    <color>3333FF</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>Template Windows Generic</host>
+                        <key>system.swap.size[,used]</key>
                     </item>
                 </graph_item>
             </graph_items>
